@@ -3,11 +3,11 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: *Student should provide answer here*
+A: Here two boxes have two digits as possible solutions, '5' and '6' for instance, so we can guarantee that the **shared peers** of this two boxes cannot consider '5' or '6' as possible solutions. With this in mind, we can propagate this information through all shared peers, i.e., eliminate '5' and '6' as their possible solutions.
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
+A: For each box **b** of the two diagonals (**d1, d2**), we should add the other boxes of the *same diagonal* as peers of **b**. This way, using the **eliminate techinque** we can guarantee that the search space is reduce and both diagonals do not contain repeated digits, since we look for solved boxes on diagonals too (instead of only looking into 3x3 cells, columns and rows).
 
 ### Install
 

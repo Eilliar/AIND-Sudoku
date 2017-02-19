@@ -124,7 +124,7 @@ def reduce_puzzle(values):
     while not stalled:
         solved_values_before = len([box for box in values.keys() if len(values[box]) == 1])
         values = eliminate(values)
-        # What if we insert naked_twins here... could improve solver speed? Comment below line and test it. ;)
+        # What if we insert naked_twins here... would improve solver speed? Comment line below and test it. ;)
         values = naked_twins(values)
         values = only_choice(values)
         solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
