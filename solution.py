@@ -159,6 +159,18 @@ column_units = [cross(rows, c) for c in cols]
 square_units = [cross(rs, cs) for rs in ('ABC','DEF','GHI') for cs in ('123','456','789')]
 unitlist = row_units + column_units + square_units
 units = dict((s, [u for u in unitlist if s in u]) for s in boxes)
+
+# To be able to solve a diagonal sudoku we have to update the units...
+# First, build the diagonals: 
+# d1 = ['A1', 'B2', 'C3', 'D4', 'E5', 'F6', 'G7', 'H8', 'I9'] and d2 = ['A9', 'B8', 'C7', 'D6', 'E5', 'F4', 'G3', 'H2', 'I1']
+diagonals = [[a+b, a+c] for a, b, c in zip(('ABCDEFGHI'), ('123456789'), ('987654321'))]
+d1, d2 = [item[0] for item in diagonals] , [item[1] for item in diagonals]
+# Now, for each box into diagonals, go to units[box] and append diagonal
+for d in (d1, d2):
+    for b in d:
+        units[b].append(d)
+
+# Now we can build peers for each box
 peers = dict((s, set(sum(units[s],[]))-set([s])) for s in boxes)
 
 ###########################################################
@@ -168,11 +180,11 @@ if __name__ == '__main__':
     diag_sudoku_grid = '2.............62....1....7...6..8...3...9...7...6..4...4....8....52.............3'
     display(solve(diag_sudoku_grid))
 
-    # try:
-    #     from visualize import visualize_assignments
-    #     visualize_assignments(assignments)
+    try:
+        from visualize import visualize_assignments
+        visualize_assignments(assignments)
 
-    # except SystemExit:
-    #     pass
-    # except:
-    #     print('We could not visualize your board due to a pygame issue. Not a problem! It is not a requirement.')
+    except SystemExit:
+        pass
+    except:
+        print('We could not visualize your board due to a pygame issue. Not a problem! It is not a requirement.')
