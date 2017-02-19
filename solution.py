@@ -28,10 +28,24 @@ def naked_twins(values):
     Returns:
         the values dictionary with the naked twins eliminated from peers.
     """
-
+    # Boxes with only two digits
+    box2digits = [b for b in boxes if len(values[b]) == 2]
     # Find all instances of naked twins
+    candidates = [(c, p) for c in box2digits for p in box2digits if (p in peers[c]) and (values[c] == values[p])]
+    # Remove permutations from candidates list, example: above list has ('H4', 'H6') and ('H6', 'H4'),
+    # so, remove the second, since it's a permutation of the first.
+    naked_twins = sorted(list(set([ (min(x), max(x)) for x in candidates ])))
     # Eliminate the naked twins as possibilities for their peers
-    pass
+    for (a, b) in naked_twins:
+        # Get common peers for each pair of naked_twins
+        common_peers = sorted([c for c in peers[a] if c in peers[b]])
+        # for each digit in naked_twins, scan common_peers and remove it if it appears
+        for digit in values[a]:
+            for peer in common_peers:
+                if digit in values[peer]:
+                    values[peer] = values[peer].replace(digit, "")
+
+    return values
 
 def cross(A, B):
     """
@@ -110,6 +124,8 @@ def reduce_puzzle(values):
     while not stalled:
         solved_values_before = len([box for box in values.keys() if len(values[box]) == 1])
         values = eliminate(values)
+        # What if we insert naked_twins here... could improve solver speed? Comment below line and test it. ;)
+        values = naked_twins(values)
         values = only_choice(values)
         solved_values_after = len([box for box in values.keys() if len(values[box]) == 1])
         stalled = solved_values_before == solved_values_after
